@@ -24,46 +24,45 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     private final ProductRrepository productRrepository;
 
     public ProductOrderResponce productOrderService(Map<String, Integer> orderMap, int paymentId) {
-
-        // 商品データ取得
+        
+        //　商品データ取得
         List<String> productIdList = orderMap.keySet().stream().toList();
         List<Product> productList = productRrepository.findById(productIdList);
         EnumPaymentMethod.getById(paymentId);
         System.out.println(productList);
-
+        
         // 個数に応じて注文データを複製
-        List<Product> expandedProductList = orderMap.entrySet().stream().flatMap(o -> {
-            String productId = o.getKey();
-            int quantity = o.getValue();
+        List<Product> expandedProductList = orderMap.entrySet().stream()
+                .flatMap(o -> {
+                    String productId = o.getKey();
+                    int quantity = o.getValue();
 
-            Product product = productList.stream().filter(p -> p.getProductId().equals(productId)).findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("商品が見つかりません: " + productId));
+                    Product product = productList.stream()
+                            .filter(p -> p.getProductId().equals(productId))
+                            .findFirst()
+                            .orElseThrow(() -> new IllegalArgumentException("商品が見つかりません: " + productId));
 
-            // 個数分複製してストリームにする
-            return Collections.nCopies(quantity, product).stream();
-        }).collect(Collectors.toList());
-
+                    // 個数分複製してストリームにする
+                    return Collections.nCopies(quantity, product).stream();
+                })
+                .collect(Collectors.toList());
+        
         // 商品種別による割引
-        List<Product> discountedPrice = productDiscount(expandedProductList);
         
-        // 商品計算
-        
-
         // 会員割引
         
-
         // 配送料計算
-
+        
         // 注文完了メッセージ作成
 
         String message = "";
         ProductOrderResponce responce = new ProductOrderResponce(message, true);
         return responce;
     }
-
+    
     /**
-     * 商品種別による割引 商品種別によって割引額を変更する
-     * 
+     * 商品種別による割引
+     * 商品種別によって割引額を変更する
      * @param products 注文データリスト
      * @return 割引後の商品データリスト
      */
@@ -84,12 +83,12 @@ public class ProductOrderServiceImpl implements ProductOrderService {
             return product;
         }).toList();
     }
-
+    
     /**
-     * 会員割引 会員ランクによって割引額を変更する
-     * 
+     * 会員割引
+     * 会員ランクによって割引額を変更する
      * @param totalPrice 割引前の金額
-     * @param userRank   会員ランク
+     * @param userRank 会員ランク
      * @return 割引後の金額
      */
     private BigDecimal userDiscount(BigDecimal subtotal, EnumUserRank userRank) {
@@ -100,10 +99,9 @@ public class ProductOrderServiceImpl implements ProductOrderService {
         default -> subtotal;
         };
     }
-
+    
     /**
      * 配送料計算
-     * 
      * @param price 配送料計算前の金額
      * @return 配送料計算後の金額
      */
