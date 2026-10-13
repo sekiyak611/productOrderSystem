@@ -12,6 +12,6 @@ public enum EnumProductType {
     FOOD,
 
     /** 電子機器 */
-    ELECTRONIC
+    ELECTRONICS
 
 }

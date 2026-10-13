@@ -12,11 +12,11 @@ import com.example.demo.dao.Product;
  * 商品レポジトリ 疑似データ
  */
 @Repository
-public class ProductRrepository {
+public class ProductRepository {
 
-    public static final List<Product> productList = List.of(
-            new Product("A001", "ノートPC", new BigDecimal(100000), EnumProductType.ELECTRONIC),
-            new Product("B002", "マウス", new BigDecimal(3000), EnumProductType.ELECTRONIC),
+    private static final List<Product> productList = List.of(
+            new Product("A001", "ノートPC", new BigDecimal(100000), EnumProductType.ELECTRONICS),
+            new Product("B002", "マウス", new BigDecimal(3000), EnumProductType.ELECTRONICS),
             new Product("C003", "水", new BigDecimal(100), EnumProductType.FOOD));
 
     /**
